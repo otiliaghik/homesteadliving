@@ -59,24 +59,22 @@ function frost_enqueue_fonts() {
 
 }
 
-// Define fonts.
 function frost_fonts_url() {
+    // Allow child themes to disable the default Frost fonts.
+    $dequeue_fonts = apply_filters( 'frost_dequeue_fonts', false );
 
-	// Allow child themes to disable to the default Frost fonts.
-	$dequeue_fonts = apply_filters( 'frost_dequeue_fonts', false );
+    if ( $dequeue_fonts ) {
+        return '';
+    }
 
-	if ( $dequeue_fonts ) {
-		return '';
-	}
+    $fonts = array(
+        'family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap',
+    );
 
-	$fonts = array(
-		'family=Cardo:ital,wght@0,400;0,700;1,400',
-	);
-
-	// Make a single request for all Google Fonts.
-	return esc_url_raw( 'https://fonts.googleapis.com/css2?' . implode( '&', array_unique( $fonts ) ) . '&display=swap' );
-
+    // Make a single request for all Google Fonts.
+    return esc_url_raw( 'https://fonts.googleapis.com/css2?' . implode( '&', array_unique( $fonts ) ) );
 }
+
 
 // Include block styles.
 require get_template_directory() . '/inc/block-styles.php';
@@ -97,3 +95,62 @@ add_filter( 'wc_product_has_unique_sku', '__return_false' );
 // Disable Login Information Emails
 remove_action( 'register_new_user', 'wp_send_new_user_notifications' );
 
+add_action( 'init', 'pv_custom_post_custom_issue' );
+// The custom function to register a custom article post type
+function pv_custom_post_custom_issue() {
+    // Set the labels. This variable is used in the $args array
+    $labels = array(
+        'name'               => __( 'Magazines' ),
+        'singular_name'      => __( 'Issue' ),
+		'menu_name'             => __( 'Magazines' ),
+        'name_admin_bar'        => __( 'Issue' ),
+        'archives'              => __( 'Magazine Archives' ),
+        'add_new'            => __( 'Add Issue & Article' ),
+        'add_new_item'       => __( 'Add Issue & Article' ),
+        'edit_item'          => __( 'Edit Issue' ),
+        'new_item'           => __( 'New Issue' ),
+        'all_items'          => __( 'All Issues' ),
+        'view_item'          => __( 'View Issue' ),
+        'search_items'       => __( 'Search Issue' )
+    );
+// The arguments for our post type, to be entered as parameter 2 of register_post_type()
+    $args = array(
+        'labels'            => $labels,
+        'description'       => 'Holds our custom issue post specific data',
+        'public'            => true,
+        'menu_position'     => 5,
+		'menu_icon'   => 'dashicons-book',
+        'has_archive'       => true,
+        'show_in_admin_bar' => true,
+        'show_in_nav_menus' => true,
+        'query_var'         => true,
+		'hierarchical' => true,
+		// 'has_archive'           => 'magazines',
+		'has_archive' => true,
+        'capability_type'    => 'page',
+		'exclude_from_search'   => false,
+        'supports' => array(
+                        'title',
+                        'editor',
+                        'excerpt',
+                        'thumbnail',
+                        'custom-fields',
+                        'page-attributes',
+						'featured_image',
+        				'set_featured_image'
+
+		),
+		'taxonomies'        => array( 'issue_category' ) // Change this to a custom name for your category type
+    );
+    register_post_type( 'issue', $args );
+    // Register custom taxonomy for issue post type
+    register_taxonomy(
+        'issue_category', // Change this to a custom name for your category type
+        'issue', // Post type to associate with the taxonomy
+        array(
+            'label'        => __( 'Issue Categories' ),
+            'rewrite'      => array( 'slug' => 'issue-category' ),
+            'hierarchical' => true
+        )
+    );
+}

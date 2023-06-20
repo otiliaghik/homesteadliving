@@ -45,7 +45,7 @@
 				{
 					"name": "Green",
 					"slug": "green",
-					"color": "#2a3a2f"
+					"color": "#0F3548"
 				},
 				{
 					"name": "Gold",
@@ -53,19 +53,19 @@
 					"color": "#b48126"
 				},
 				{
-					"name": "Orange",
+					"name": "Darkest Gray",
 					"slug": "orange",
-					"color": "#8c3e0d"
+					"color": "#A9A9A9"
 				},
 				{
-					"name": "Graphite",
+					"name": "Dark Gray",
 					"slug": "graphite",
-					"color": "#39352d"
+					"color": "#504E51"
 				},
 				{
 					"name": "Gray",
 					"slug": "gray",
-					"color": "#ebebeb"
+					"color": "#E3E3E3"
 				},
 				{
 					"name": "Tan",
@@ -99,12 +99,12 @@
 				"body": 1.75
 			},
 			"spacing": {
-				"outer": "30px"
+				"outer": "40px"
 			}
 		},
 		"layout": {
-			"contentSize": "640px",
-			"wideSize": "1200px"
+			"contentSize": "1128px",
+			"wideSize": "1344px"
 		},
 		"spacing": {
 			"blockGap": true,
@@ -117,8 +117,8 @@
 			"dropCap": false,
 			"fontFamilies": [
 				{
-					"fontFamily": "\"Cardo\", serif",
-					"name": "Cardo",
+					"fontFamily": "serif",
+            			"name": "serif",
 					"slug": "primary"
 				}
 			],
@@ -126,12 +126,12 @@
 				{
 					"name": "Small",
 					"slug": "small",
-					"size": "16px"
+					"size": "18px"
 				},
 				{
 					"name": "Medium",
 					"slug": "medium",
-					"size": "20px"
+					"size": "22px"
 				},
 				{
 					"name": "Large",
@@ -187,10 +187,10 @@
 				},
 				"spacing": {
 					"padding": {
-						"top": "10px",
-						"right": "25px",
-						"bottom": "10px",
-						"left": "25px"
+						"top": "24px",
+						"right": "24px",
+						"bottom": "24px",
+						"left": "24px"
 					}
 				},
 				"typography": {
@@ -201,7 +201,7 @@
 			"core/column": {
 				"spacing": {
 					"margin": {
-						"bottom": "30px"
+						"bottom": "40px"
 					}
 				}
 			},
