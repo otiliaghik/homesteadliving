@@ -154,3 +154,17 @@ function pv_custom_post_custom_issue() {
         )
     );
 }
+
+function custom_excerpt_more($more) {
+    return ''; // Remove the ellipsis ("...") from the excerpt.
+}
+add_filter('excerpt_more', 'custom_excerpt_more');
+
+function custom_excerpt_filter($excerpt) {
+    $first_sentence = preg_match('/^.*?[a-z0-9][.!?]/i', $excerpt, $matches);
+    if ($first_sentence) {
+        $excerpt = $matches[0];
+    }
+    return $excerpt;
+}
+add_filter('get_the_excerpt', 'custom_excerpt_filter');
