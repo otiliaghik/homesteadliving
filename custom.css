@@ -25,6 +25,11 @@
 
 }
 
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     font-family: 'Garamond Premier Pro';
     font-size: 22px;
@@ -38,6 +43,11 @@ body a {
 
 body .wp-site-blocks > * + * {
     margin-block-start: 0 !important;
+}
+
+body.page-template-no-title .wp-site-blocks {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 body .wp-block-social-links.is-style-logos-only .wp-social-link svg {
@@ -55,7 +65,7 @@ h1, h2, h3, .title {
 
 h4, h5, h6,
 .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation-item__content,
-.taxonomy-category.wp-block-post-terms {
+.taxonomy-category.wp-block-post-terms.apbExcerpt, body a[rel="category tag"] {
     font-family: 'Avenir'; 
 }
 
@@ -201,4 +211,200 @@ ul.home-articles li:not(:first-child) .wp-block-column.post-text {
     z-index: 9;
     left: calc(100% - 526px);
     padding-left: 0;
+}
+
+/* Blog page */
+
+.featured-article.wp-block-ap-block-posts .apbPost.apbSideImage.grid {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+@media (min-width: 782px) {
+.featured-article.wp-block-ap-block-posts .apbPost .apbText {
+    flex-basis: 0;
+    flex-grow: 1;
+}
+.featured-article.wp-block-ap-block-posts .apbPost.apbSideImage.rightImage .apbThumb {
+    flex-grow: 0;
+}
+}
+
+.featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text {
+    position: absolute;
+    background: #fff;
+    max-width: 612px;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    padding-right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9;
+    left: calc(50% - 553px);
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbTitle {
+    order: 1;
+}
+
+.featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbTitle a {
+    padding-right: 60px;
+}
+
+.featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .button-box {
+    order: 3;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbMeta {
+    width: 63%;
+    margin: 0 !important;
+}
+
+.wp-block-ap-block-posts .apbPost .apbText .apbMeta {
+    display: inline-flex;
+    align-items: center;
+}
+.wp-block-ap-block-posts .apbPost .apbText .apbMeta::after {
+    content: '';
+    border-top: 1px solid #E3E3E3;
+    flex-grow: 1;
+}
+.featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbMeta span span.dashicon.dashicons-category {
+    display: none;
+}
+
+.featured-article .apbPost .apbReadMore .apbMeta a {
+    display: inline-block;
+    font-weight: 400;
+    font-size: 13px;
+    font-style: normal;
+    text-transform: uppercase;
+    text-decoration: auto;
+    line-height: 100%;
+    letter-spacing: 1.3px;
+    color: #A9A9A9;
+    padding: 0;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    border-left: none;
+}
+
+.featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbMeta {
+    position: relative;
+}
+
+/* .featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbMeta::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #E3E3E3;
+    transform: translateY(50%); /* Center the border vertically */
+
+
+.featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbExcerpt {
+    order: 2;
+    font-family: 'Garamond Premier Pro';
+}
+
+.featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbReadMore {
+    order: 3;
+}
+
+/* .featured-article.wp-block-ap-block-posts .apbPost.apbSideImage.rightImage {
+    grid-template-columns: 1fr 1.3fr ;
+} */
+
+body .apbPost .apbMeta .dashicons {
+    display: none;
+}
+ 
+.featured-article.wp-block-ap-block-posts .apbPost.apbSideImage.rightImage .apbThumb {
+    flex-basis: 56%;
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.blog-tabs.wp-block-uagb-tabs {
+    max-width: 1128px;
+    margin: 0 auto;
+}
+
+.blog-tabs.wp-block-uagb-tabs .uagb-tabs__body-wrap {
+    padding-right: 0;
+}
+
+.blog-tabs.wp-block-uagb-tabs.uagb-tabs__wrap .uagb-tabs__body-container {
+    padding: 10px 0;
+}
+
+.blog-tabs .apbPost .apbThumb {
+    height: 360px;
+}
+
+.blog-tabs .apbPost .apbThumb>a {
+    height: 100%;
+}
+
+.blog-tabs .apbPost .apbThumb>a img {
+    aspect-ratio: 1/1;
+}
+
+body .blog-tabs .apbGridPosts .apbPost .apbText {
+    padding: 24px 38px 24px 24px !important;
+    background-color: #fff;
+    margin-top: -80px;
+    z-index: 2;
+    position: relative;
+    width: 89%;
+    display: flex;
+    flex-direction: column;
+}
+
+body .blog-tabs .apbGridPosts .apbPost .apbText .apbTitle {
+    order: 2;
+}
+
+.blog-tabs .apbPost.ten, .blog-tabs .apbPost:nth-child(10), .blog-tabs .apbPost:nth-child(25), .blog-tabs .apbPost:nth-child(40) {
+    grid-column: span 2;
+    grid-row: span 2;
+    padding: 0;
+}
+
+.blog-tabs .apbPost.six, .blog-tabs .apbPost:nth-child(6), .blog-tabs .apbPost:nth-child(21), .blog-tabs .apbPost:nth-child(36) {
+    grid-column: 2 / span 2;
+    grid-row: 2 / span 2;
+}
+
+.blog-tabs .apbPost.ten, .blog-tabs .apbPost:nth-child(10), .blog-tabs .apbPost:nth-child(25), .blog-tabs .apbPost:nth-child(40)
+.blog-tabs .apbPost.six, .blog-tabs .apbPost:nth-child(6), .blog-tabs .apbPost:nth-child(21), .blog-tabs .apbPost:nth-child(36) {
+    margin-top: 0;
+    width: 100%;
+}
+
+body .blog-tabs .apbGridPosts .apbPost.ten .apbThumb, .blog-tabs .apbPost:nth-child(6) .apbThumb, .blog-tabs .apbPost:nth-child(21) .apbThumb, .blog-tabs .apbPost:nth-child(36) .apbThumb,
+body .blog-tabs .apbGridPosts .apbPost.six .apbThumb, .blog-tabs .apbPost:nth-child(10) .apbThumb, .blog-tabs .apbPost:nth-child(25) .apbThumb, .blog-tabs .apbPost:nth-child(40) .apbThumb {
+    height: 744px;
+}
+
+body .blog-tabs .apbGridPosts .apbPost.ten .apbTitle, body .blog-tabs .apbGridPosts .apbPost.ten .apbTitle a,
+body .blog-tabs .apbGridPosts .apbPost.six .apbTitle, body .blog-tabs .apbGridPosts .apbPost.six .apbTitle a,
+.blog-tabs .apbPost:nth-child(10) .apbTitle, .blog-tabs .apbPost:nth-child(25) .apbTitle, .blog-tabs .apbPost:nth-child(40) .apbTitle,
+.blog-tabs .apbPost:nth-child(6) .apbTitle, .blog-tabs .apbPost:nth-child(21) .apbTitle, .blog-tabs .apbPost:nth-child(36) .apbTitle,
+.blog-tabs .apbPost:nth-child(10) .apbTitle a, .blog-tabs .apbPost:nth-child(25) .apbTitle a, .blog-tabs .apbPost:nth-child(40) .apbTitle a,
+.blog-tabs .apbPost:nth-child(6) .apbTitle a, .blog-tabs .apbPost:nth-child(21) .apbTitle a, .blog-tabs .apbPost:nth-child(36) .apbTitle a {
+    font-size: 48px !important;
+    line-height: 125% !important;
+    letter-spacing: -1.44px !important;
 }

@@ -168,3 +168,17 @@ function custom_excerpt_filter($excerpt) {
     return $excerpt;
 }
 add_filter('get_the_excerpt', 'custom_excerpt_filter');
+
+
+function custom_apb_excerpt_filter($excerpt) {
+    $dom = new DOMDocument();
+    libxml_use_internal_errors(true); // Disable libxml errors
+    $dom->loadHTML(mb_convert_encoding($excerpt, 'HTML-ENTITIES', 'UTF-8'));
+    $xpath = new DOMXPath($dom);
+    $first_sentence = $xpath->evaluate('string(//text()[normalize-space()][1])');
+    $first_sentence = preg_replace('/\s+/', ' ', $first_sentence); // Trim excess whitespace
+
+    return $first_sentence;
+}
+
+add_filter('advanced_post_block_excerpt', 'custom_apb_excerpt_filter');
