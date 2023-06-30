@@ -40,7 +40,7 @@
 				{
 					"name": "Black",
 					"slug": "black",
-					"color": "#000"
+					"color": "#171717"
 				},
 				{
 					"name": "Green",
@@ -141,7 +141,7 @@
 				{
 					"name": "xLarge",
 					"slug": "x-large",
-					"size": "30px"
+					"size": "56px"
 				},
 				{
 					"name": "36px",
