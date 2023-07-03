@@ -18,7 +18,50 @@ jQuery(document).ready(function($) {
   });
   
 
+  
+    // Preload the first tab content
+    loadTabContent('.uagb-tabs__body-container.uagb-tabs-body__active');
+  
+    // Event handler for tab clicks
+    $('.uagb-tabs__panel a').click(function(e) {
+      e.preventDefault();
+  
+      var targetTab = $(this).attr('href');
+  
+      // Load the tab content only if it hasn't been loaded before
+      if (!$(targetTab).hasClass('loaded')) {
+        loadTabContent(targetTab);
+        $(targetTab).addClass('loaded');
+      }
+  
+      // Show the selected tab and hide others
+      $('.uagb-tabs__body-container').removeClass('uagb-tabs-body__active');
+      $(targetTab).addClass('uagb-tabs-body__active');
+    });
+
+
+    $(".wp-block-ap-block-posts .apbPagination .apbPageNumber").each(function() {
+      // Check if the element contains the text "Prev"
+      if ($(this).text().trim() === "Prev") {
+        // Replace the text "Prev" with "Previous"
+        $(this).text("Previous");
+      }
+    });
+
+
 });
+
+
+function loadTabContent(tabId) {
+  // Show a loading spinner while content is being loaded
+  $(tabId).html('<div class="loading-spinner">Loading...</div>');
+
+  // Simulate an AJAX request delay with setTimeout (remove this in production)
+  setTimeout(function() {
+    // Replace the loading spinner with the actual content
+    $(tabId).html('Content for ' + tabId);
+  }, 1000); // Adjust the delay time as needed
+}
 
 
 

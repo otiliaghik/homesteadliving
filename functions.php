@@ -182,3 +182,52 @@ function custom_apb_excerpt_filter($excerpt) {
 }
 
 add_filter('advanced_post_block_excerpt', 'custom_apb_excerpt_filter');
+
+function issue_post_type_archive_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'post_type' => 'issue'
+    ), $atts);
+
+    $post_type_archive_link = get_post_type_archive_link($atts['post_type']);
+
+    if (!$post_type_archive_link) {
+        return '';
+    }
+
+    $post_type_object = get_post_type_object($atts['post_type']);
+    $archive_label = $post_type_object->labels->archives;
+
+    return sprintf(
+        '<a href="%s">%s</a>',
+        esc_url($post_type_archive_link),
+        esc_html($archive_label)
+    );
+}
+add_shortcode('issue_post_type_archive', 'issue_post_type_archive_shortcode');
+
+function get_issue_custom_posts_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'posts_per_page' => -1,
+        'post_type'      => 'issue'
+    ), $atts);
+
+    $query = new WP_Query(array(
+        'post_type'      => $atts['post_type'],
+        'posts_per_page' => $atts['posts_per_page'],
+        'post_parent'    => 0 // Only fetch parent pages
+    ));
+
+    $output = '';
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $output .= '<p>' . get_the_title() . '</p>';
+            // You can customize the output as per your requirement
+        }
+        wp_reset_postdata();
+    }
+
+    return $output;
+}
+add_shortcode('issue_custom_posts', 'get_issue_custom_posts_shortcode');
