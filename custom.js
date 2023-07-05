@@ -48,6 +48,8 @@ jQuery(document).ready(function($) {
       }
     });
 
+    
+
 
 });
 
@@ -73,4 +75,20 @@ function numberToWord(number) {
     } else {
       return '';
     }
+  }
+
+  function copyToClipboard() {
+    var dummyInput = document.createElement('input');
+    dummyInput.setAttribute('value', window.location.href);
+    document.body.appendChild(dummyInput);
+    dummyInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummyInput);
+    
+    var copyStatus = document.getElementById('copyStatus');
+    copyStatus.style.display = 'inline';
+    
+    setTimeout(function() {
+      copyStatus.style.display = 'none';
+    }, 2000);
   }

@@ -75,6 +75,11 @@ function frost_fonts_url() {
     return esc_url_raw( 'https://fonts.googleapis.com/css2?' . implode( '&', array_unique( $fonts ) ) );
 }
 
+function enqueue_clipboard_js() {
+    wp_enqueue_script('clipboard-js', 'https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js', array(), '2.0.8', true);
+}
+add_action('wp_enqueue_scripts', 'enqueue_clipboard_js');
+
 
 // Include block styles.
 require get_template_directory() . '/inc/block-styles.php';
@@ -231,3 +236,93 @@ function get_issue_custom_posts_shortcode($atts) {
     return $output;
 }
 add_shortcode('issue_custom_posts', 'get_issue_custom_posts_shortcode');
+
+// Add the shortcode to functions.php or your custom plugin file
+add_shortcode('like_button', 'like_button_shortcode');
+
+// Define the shortcode callback function
+function like_button_shortcode($atts) {
+    // Get post ID
+    $post_id = get_the_ID();
+
+    // Check if the user has already liked the post
+    $user_id = get_current_user_id();
+    $liked = false;
+    if ($user_id) {
+        $liked = get_user_meta($user_id, 'liked_posts', true);
+        if ($liked && in_array($post_id, $liked)) {
+            $liked = true;
+        }
+    }
+
+    // Output the like button
+    ob_start();
+    ?>
+    <form method="post" class="like-form">
+        <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
+        <input type="hidden" name="action" value="like_post">
+        <?php wp_nonce_field('like_post', 'like_post_nonce'); ?>
+        <button type="submit" class="like-button <?php echo $liked ? 'liked' : ''; ?>">
+            <?php echo $liked ? '<svg width="21" height="17" viewBox="0 0 21 17" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.7422 1.46484C19.957 3.36328 20.0625 6.73828 18.0938 8.77734L11.2734 15.8086C11.0625 16.0195 10.7812 16.125 10.4648 16.125C10.1836 16.125 9.90234 16.0195 9.69141 15.8086L2.87109 8.77734C0.902344 6.73828 1.00781 3.36328 3.22266 1.46484C4.06641 0.726562 5.12109 0.375 6.17578 0.375C7.47656 0.375 8.8125 0.9375 9.79688 1.92188L10.5 2.66016L11.168 1.92188C12.1523 0.9375 13.4883 0.375 14.7891 0.375C15.8438 0.375 16.8984 0.726562 17.7422 1.46484ZM16.8633 7.61719C18.0234 6.42188 18.2695 4.13672 16.6523 2.76562C15.2461 1.53516 13.3125 2.16797 12.3984 3.11719L10.5 5.08594L8.56641 3.11719C7.65234 2.13281 5.71875 1.53516 4.3125 2.76562C2.69531 4.13672 2.97656 6.42188 4.10156 7.61719L10.5 14.1914L16.8633 7.61719Z" fill="black"/></svg>' : '<svg width="21" height="17" viewBox="0 0 21 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.7422 1.46484C19.957 3.36328 20.0625 6.73828 18.0938 8.77734L11.2734 15.8086C11.0625 16.0195 10.7812 16.125 10.4648 16.125C10.1836 16.125 9.90234 16.0195 9.69141 15.8086L2.87109 8.77734C0.902344 6.73828 1.00781 3.36328 3.22266 1.46484C4.06641 0.726562 5.12109 0.375 6.17578 0.375C7.47656 0.375 8.8125 0.9375 9.79688 1.92188L10.5 2.66016L11.168 1.92188C12.1523 0.9375 13.4883 0.375 14.7891 0.375C15.8438 0.375 16.8984 0.726562 17.7422 1.46484ZM16.8633 7.61719C18.0234 6.42188 18.2695 4.13672 16.6523 2.76562C15.2461 1.53516 13.3125 2.16797 12.3984 3.11719L10.5 5.08594L8.56641 3.11719C7.65234 2.13281 5.71875 1.53516 4.3125 2.76562C2.69531 4.13672 2.97656 6.42188 4.10156 7.61719L10.5 14.1914L16.8633 7.61719Z" fill="black"/>
+</svg>'; ?>
+        </button>
+    </form>
+    <?php
+    return ob_get_clean();
+}
+
+// Handle the form submission
+add_action('init', 'handle_like_post');
+
+function handle_like_post() {
+    if (isset($_POST['action']) && $_POST['action'] === 'like_post' && isset($_POST['like_post_nonce'])) {
+        // Verify the nonce
+        if (!wp_verify_nonce($_POST['like_post_nonce'], 'like_post')) {
+            die('Invalid nonce');
+        }
+
+        // Get the post ID
+        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+
+        // Get the current user ID
+        $user_id = get_current_user_id();
+
+        // Update the liked posts meta for the user
+        $liked_posts = get_user_meta($user_id, 'liked_posts', true);
+        if (!$liked_posts) {
+            $liked_posts = array();
+        }
+
+        // Check if the post is already liked and update accordingly
+        if (in_array($post_id, $liked_posts)) {
+            $liked_posts = array_diff($liked_posts, array($post_id));
+            update_user_meta($user_id, 'liked_posts', $liked_posts);
+        } else {
+            $liked_posts[] = $post_id;
+            update_user_meta($user_id, 'liked_posts', $liked_posts);
+        }
+
+        // Redirect back to the post
+        wp_redirect(get_permalink($post_id));
+        exit;
+    }
+}
+
+function add_read_more_link($content) {
+    global $post;
+  
+    // Check if the post content is the "Biographical Info" textarea
+    if (is_author() && isset($_GET['author']) && get_the_ID() == $_GET['author']) {
+      $content = get_the_author_meta('description');
+      if (strpos($content, 'wp-block-post-author__bio') !== false) {
+        $excerpt = substr($content, 0, 150); // Change 150 to your desired character limit
+        $trimmedContent = substr($excerpt, 0, strrpos($excerpt, ' '));
+        $content = $trimmedContent . '...' . '<a href="' . get_author_posts_url(get_the_ID()) . '" class="read-more">Read More</a>';
+      }
+    }
+  
+    return $content;
+  }
+  add_filter('the_content', 'add_read_more_link');
+  

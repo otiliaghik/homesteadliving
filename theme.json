@@ -53,9 +53,14 @@
 					"color": "#b48126"
 				},
 				{
+					"name": "Lighter Gray",
+					"slug": "lgrey",
+					"color": "#A9A9A9"
+				},
+				{
 					"name": "Darkest Gray",
 					"slug": "orange",
-					"color": "#A9A9A9"
+					"color": "#9C9C9C"
 				},
 				{
 					"name": "Dark Gray",
