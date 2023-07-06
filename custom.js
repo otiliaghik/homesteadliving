@@ -92,3 +92,20 @@ function numberToWord(number) {
       copyStatus.style.display = 'none';
     }, 2000);
   }
+
+
+  function copyagainClipboard() {
+    var dummyInput = document.createElement('input');
+    dummyInput.setAttribute('value', window.location.href);
+    document.body.appendChild(dummyInput);
+    dummyInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummyInput);
+    
+    var copyStatus = document.getElementById('copyAgain');
+    copyStatus.style.display = 'inline';
+    
+    setTimeout(function() {
+      copyStatus.style.display = 'none';
+    }, 2000);
+  }
