@@ -422,3 +422,32 @@ function author_more_description_shortcode() {
     return $more_description;
 }
 add_shortcode('author_more_description', 'author_more_description_shortcode');
+
+
+function books_by_author_shortcode() {
+    $author_id = get_queried_object_id();
+    $books = get_field('books_by_author', 'user_' . $author_id);
+
+    $output = '';
+
+    if ($books) {
+        $output .='<h2>Author books</h2>';
+        foreach ($books as $book) {
+            $product_id = $book->ID;
+            $product_title = get_the_title($product_id);
+            $product_image = get_the_post_thumbnail($product_id, 'thumbnail');
+            $product_link = get_permalink($product_id);
+            $product_button = '<a href="' . $product_link . '" class="button">Buy Now</a>';
+
+            $output .= '<div class="product">';
+            $output .= $product_image;
+            $output .= '<h3>' . $product_title . '</h3>';
+            $output .= $product_button;
+            $output .= '</div>';
+        }
+    } 
+
+    return $output;
+}
+add_shortcode('books_by_author', 'books_by_author_shortcode');
+
