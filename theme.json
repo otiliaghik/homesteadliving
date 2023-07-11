@@ -73,6 +73,11 @@
 					"color": "#E3E3E3"
 				},
 				{
+					"name": "Very Light Gray",
+					"slug": "grayish",
+					"color": "#F4F4F4"
+				},
+				{
 					"name": "Tan",
 					"slug": "tan",
 					"color": "#fbf9f5"

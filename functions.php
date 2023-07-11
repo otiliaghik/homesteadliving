@@ -139,10 +139,12 @@ function pv_custom_post_custom_issue() {
                         'editor',
                         'excerpt',
                         'thumbnail',
+                        'author',
                         'custom-fields',
                         'page-attributes',
 						'featured_image',
-        				'set_featured_image'
+        				'set_featured_image',
+                        'author'
 
 		),
 		'taxonomies'        => array( 'issue_category' ) // Change this to a custom name for your category type
@@ -159,6 +161,40 @@ function pv_custom_post_custom_issue() {
         )
     );
 }
+
+add_filter('wp_dropdown_users', 'include_authors_contributors_in_dropdown');
+
+function include_authors_contributors_in_dropdown($output) {
+    $args = array(
+        'role__in' => array('author', 'contributor'),
+        'orderby' => 'display_name',
+        'order' => 'ASC',
+        'echo' => false
+    );
+
+    $users = get_users($args);
+
+    $output = wp_dropdown_users(array(
+        'name' => 'post_author',
+        'exclude' => '1', // Exclude the administrator
+        'selected' => get_post_field('post_author'),
+        'include_selected' => true,
+        'show_option_none' => __('— Select Author —'),
+        'option_none_value' => '0',
+        'echo' => false
+    ));
+
+    // Append the contributors to the dropdown
+    $output = preg_replace('/<\/select>/', '', $output);
+    $output .= '<optgroup label="' . esc_attr__('Contributors') . '">';
+    foreach ($users as $user) {
+        $output .= '<option value="' . esc_attr($user->ID) . '"' . selected($user->ID, get_post_field('post_author'), false) . '>' . esc_html($user->display_name) . '</option>';
+    }
+    $output .= '</optgroup></select>';
+
+    return $output;
+}
+
 
 function custom_excerpt_more($more) {
     return ''; // Remove the ellipsis ("...") from the excerpt.
@@ -254,3 +290,135 @@ function add_read_more_link($content) {
   }
   add_filter('the_content', 'add_read_more_link');
   
+
+  function author_users_shortcode() {
+    $users = get_users( array( 'role' => 'author' ) );
+
+    $output = '<ul>';
+
+    foreach ( $users as $user ) {
+        $user_profile_url = get_author_posts_url( $user->ID );
+        $user_profile_picture = get_avatar( $user->ID, 32 );
+
+        $output .= '<li><a href="' . $user_profile_url . '">' . $user_profile_picture . ' ' . $user->display_name . '</a></li>';
+    }
+
+    $output .= '</ul>';
+
+    return $output;
+}
+add_shortcode( 'author_users', 'author_users_shortcode' );
+
+
+function contributor_users_shortcode() {
+    $users = get_users( array( 'role' => 'contributor' ) );
+
+    $output = '<ul>';
+
+    foreach ( $users as $user ) {
+        $user_profile_url = get_author_posts_url( $user->ID );
+        $user_contact_info = '';
+
+        // Check if contact information is available
+        if ( ! empty( $user->linkedin ) ) {
+            $user_contact_info .= '<a href="' . $user->linkedin . '">Linkedin</a> ';
+        }
+        if ( ! empty( $user->facebook ) ) {
+            $user_contact_info .= '<a href="' . $user->facebook . '">Facebook</a> ';
+        }
+        if ( ! empty( $user->instagram ) ) {
+            $user_contact_info .= '<a href="' . $user->instagram . '">Instagram</a> ';
+        }
+        if ( ! empty( $user->twitter ) ) {
+            $user_contact_info .= '<a href="' . $user->twitter . '">Twitter</a> ';
+        }
+
+        $output .= '<li><a href="' . $user_profile_url . '">' . $user->display_name . '</a>' . ($user_contact_info ? ' - ' . $user_contact_info : '') . '</li>';
+    }
+
+    $output .= '</ul>';
+
+    return $output;
+}
+add_shortcode( 'contributor_users', 'contributor_users_shortcode' );
+
+
+function author_image_shortcode($atts) {
+    // Get the author ID
+    $author_id = get_queried_object_id();
+
+    // Get the author avatar HTML
+    $author_avatar = get_avatar($author_id, array('size' => 'full'));
+
+    // Return the HTML for displaying the author image
+    ob_start();
+    ?>
+    <div class="wp-block-post-author__avatar">
+        <?php echo $author_avatar; ?>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+add_shortcode('author_image', 'author_image_shortcode');
+
+
+function author_name_shortcode($atts) {
+    // Get the author ID
+    $author_id = get_queried_object_id();
+    
+    // Get the author's display name
+    $author_name = get_the_author_meta('display_name', $author_id);
+    
+    // Return the author's name
+    return $author_name;
+}
+add_shortcode('author_name', 'author_name_shortcode');
+
+function author_bio_shortcode($atts) {
+    // Get the author ID
+    $author_id = get_queried_object_id();
+    
+    // Get the author's biography
+    $author_bio = get_the_author_meta('description', $author_id);
+    
+    // Return the author's biography
+    return $author_bio;
+}
+add_shortcode('author_bio', 'author_bio_shortcode');
+
+
+function author_socials_shortcode() {
+    $author_id = get_queried_object_id();
+    $author_profile_url = get_author_posts_url($author_id);
+    $author_contact_info = '';
+
+    // Check if contact information is available for the author
+    if (!empty(get_the_author_meta('linkedin', $author_id))) {
+        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('linkedin', $author_id)) . '">Linkedin</a> ';
+    }
+    if (!empty(get_the_author_meta('facebook', $author_id))) {
+        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('facebook', $author_id)) . '">Facebook</a> ';
+    }
+    if (!empty(get_the_author_meta('instagram', $author_id))) {
+        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('instagram', $author_id)) . '">Instagram</a> ';
+    }
+    if (!empty(get_the_author_meta('twitter', $author_id))) {
+        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('twitter', $author_id)) . '">Twitter</a> ';
+    }
+
+    $output = '<ul>';
+    $output .= '<li><a href="' . esc_url($author_profile_url) . '">' . get_the_author_meta('display_name', $author_id) . '</a>' . ($author_contact_info ? ' - ' . $author_contact_info : '') . '</li>';
+    $output .= '</ul>';
+
+    return $output;
+}
+add_shortcode('author_socials', 'author_socials_shortcode');
+
+
+function author_more_description_shortcode() {
+    $author_id = get_queried_object_id();
+    $more_description = get_field('more_description', 'user_' . $author_id);
+
+    return $more_description;
+}
+add_shortcode('author_more_description', 'author_more_description_shortcode');
