@@ -64,9 +64,15 @@ body {
     line-height: 33px;
 }
 
-.page .site-content {
-    padding-top: 0 !important;
+body.archive.author.logged-in, body.error404.logged-in {
+    margin-top: 30px;
 }
+
+.page.page-template-no-title .site-content {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
 
 #apbAdvancedPosts-bf56f0f8-9 .apbDefault, #apbAdvancedPosts-bf56f0f8-9 .apbSideImage,
 #apbAdvancedPosts-faf328f8-5 .apbDefault, #apbAdvancedPosts-faf328f8-5 .apbSideImage {
@@ -85,7 +91,7 @@ body .wp-site-blocks > * + * {
     margin-block-start: 0 !important;
 }
 
-body.page-template-no-title .wp-site-blocks {
+body.page-template-no-title .wp-site-blocks, .author .wp-site-blocks {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
@@ -111,8 +117,17 @@ h4, h5, h6,
     font-family: 'Avenir'; 
 }
 
+h1.wp-block-post-title {
+    border-bottom: none !important;
+}
+
 .max-640 {
     max-width: 640px;
+    margin: 0 auto;
+}
+
+.max-1200 {
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -177,6 +192,11 @@ footer .footer-list li:before {
     font-family: 'Avenir'; 
     font-weight: 400;
     letter-spacing: 1.8px;
+}
+
+.site-footer {
+    position: relative;
+    z-index: 99;
 }
 
 .site-footer .wp-block-image.aligncenter {
@@ -908,10 +928,15 @@ body .featured-text h1, body .featured-text p {
     top: 50%;
     transform: translateY(-50%);
     z-index: 9;
+    width: 100%;
     left: calc(50% - 553px);
     padding-left: 0;
     display: flex;
     flex-direction: column;
+}
+
+.top-article.contact-banner .featured-text {
+    left: calc(50% - 553px);
 }
 
 .featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbTitle {
@@ -1473,7 +1498,18 @@ body .wp-block-navigation .wp-block-navigation__submenu-icon svg {
     text-align: center;
 }
 
-.others-container, .heading-articles {
+.other-authors.wp-block-cover {
+    background: linear-gradient(360deg, #EDEDED 0%, #EDEDED 100%);
+    position: relative;
+}
+
+.other-authors.wp-block-cover .wp-block-cover__image-background {
+    height: 50%;
+    top: 50%;
+    z-index: 1;
+}
+
+.others-container, .heading-articles, .authorlist-books {
     grid-gap: 24px 24px;
     align-items: initial;
     display: grid;  
@@ -1597,6 +1633,199 @@ body .wp-block-navigation .wp-block-navigation__submenu-icon svg {
     text-decoration: none;
 }
 
+.author-description .wp-block-cover__inner-container {
+    max-width: 720px;
+}
+
+.author-description .wp-block-cover__inner-container h2 {
+    margin-bottom: 24px;
+}
+
+.author-books .authorlist-books {
+    margin-block-start: 80px !important;
+}
+
+.author-books .authorlist-books .product {
+    text-align: center;
+}
+
+.author-books .authorlist-books span {
+    color: #0F3548;
+    text-align: center;
+    font-family: 'Playfair Display';
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 125%; /* 35px */
+    padding: 0 15px;
+    letter-spacing: -0.84px;
+    margin-bottom: 24px;
+    display: block;
+}
+
+.button.transparent {
+    border: 1px solid #504E51;
+    background: #FFF;
+    padding: 21px 24px;
+    display: inline-block;
+    color: #0F3548;
+    font-family: 'Avenir';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 100%; /* 18px */
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.button.transparent:hover {
+    text-decoration: none;
+    background-color: #0F3548;
+    border: 1px solid #0F3548;
+    color: #fff;
+}
+
+.wp-block-columns.author-banner {
+    box-sizing: border-box;
+    direction: ltr;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: auto 56%;
+    position: relative;
+}
+
+.wp-block-columns.author-banner .wp-block-post-author__avatar {
+    margin-left: 0;
+    margin-right: 0;
+    position: relative;
+}
+
+.wp-block-columns.author-banner .wp-block-post-author__avatar img {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    box-sizing: border-box;
+    height: auto;
+    max-width: 100%;
+    vertical-align: bottom;
+    width: 100%;
+}
+
+.wp-block-columns.author-banner .featured-text {
+    position: absolute;
+    background: #fff;
+    max-width: 612px;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    padding-right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9;
+    left: calc(50% - 553px);
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.wp-block-columns.author-banner .featured-part {
+    grid-column: 2;
+    grid-row: 1
+}
+
+.author-name-banner p {
+    display: none;
+}
+
+.author-name-banner h1 {
+    margin: 18px 0 0;
+}
+
+p.author-bio-banner {
+    margin-top: 24px;
+}
+
+body .author-socials-banner {
+    margin-block-start: 24px;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+}
+
+
+/* Contact Page  */
+
+.contact-cover.wp-block-cover .wp-block-cover__image-background {
+    height: 40%;
+    top: 60%;
+} 
+
+.contact-cover.wp-block-cover {
+    background: linear-gradient(360deg, #EDEDED 0%, #EDEDED 100%);
+    position: relative;
+}
+
+.contact-cover .gf_browser_chrome.gform_wrapper .gform_heading {
+    display: none;
+}
+
+.contact-cover .gform_wrapper.gravity-theme .gform_fields {
+    grid-row-gap: 24px;
+}
+
+.contact-cover .gform_wrapper.gravity-theme .gfield_label {
+    color: #504E51;
+    font-family: 'Garamond Premier';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 30px */
+}
+
+.contact-cover .gform_wrapper.gravity-theme .ginput_complex input, .contact-cover .gform_wrapper.gravity-theme .ginput_complex select, .contact-cover .gform_wrapper.gravity-theme .gfield textarea.large, .contact-cover .gform_wrapper.gravity-theme .gfield input.large, .contact-cover .gform_wrapper.gravity-theme .gfield select.large, .contact-cover .gform_wrapper.gravity-theme .gfield textarea.small, .contact-cover .gform_wrapper.gravity-theme .gfield textarea.medium {
+    border: 1px solid #E3E3E3;
+    background: #FFF;
+    padding: 17px 24px;
+    height: 64px;
+}
+
+.contact-cover .gform_wrapper.gravity-theme .gform_footer {
+    justify-content: center;
+    margin: 24px 0 0 0;
+    padding: 0;
+}
+
+.contact-cover .gform_wrapper.gravity-theme .ginput_container_address span {
+    margin-bottom: 8px;
+}
+
+.contact-cover .gform_wrapper.gravity-theme .ginput_complex input::placeholder, .contact-cover .gform_wrapper.gravity-theme .ginput_complex select::placeholder, .contact-cover .gform_wrapper.gravity-theme .gfield textarea.large::placeholder, .contact-cover .gform_wrapper.gravity-theme .gfield textarea.small::placeholder, .contact-cover .gform_wrapper.gravity-theme .gfield textarea.medium::placeholder {
+    color: #A9A9A9;
+    font-family: 'Garamond Premier';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 30px */
+}
+
+.contact-cover .gform_wrapper.gravity-theme .gfield textarea.large,
+.contact-cover .gform_wrapper.gravity-theme .gfield textarea.small,
+.contact-cover .gform_wrapper.gravity-theme .gfield textarea.medium {
+    height: 120px;
+}
+
+.contact-cover .gform_wrapper.gravity-theme .gform_footer input[type="submit"] {
+    font-family: 'Avenir';
+    font-size: 18px;
+    font-style: normal;
+    padding: 24px;
+    font-weight: 400;
+    line-height: 100%; /* 18px */
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.contact-cover .uagb-tabs__wrap .uagb-tabs__body-container {
+    padding: 0;
+}
 
 /* RESPONSIVE Styles */
 

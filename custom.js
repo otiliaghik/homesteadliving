@@ -3,50 +3,50 @@ jQuery(document).ready(function($) {
 
     $(".featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbMeta, .featured-article.wp-block-ap-block-posts .apbPost .apbText .featured-text .apbReadMore").wrapAll('<div class="button-box"></div>');
 
-  var articles = $('.blog-tabs .apbGridPosts').find('article');
+  // var articles = $('.blog-tabs .apbGridPosts').find('article');
 
-  // Iterate over each article and assign a class based on its number
-  articles.each(function(index) {
-    // Add 1 to the index since it starts from 0
-    var articleNumber = index + 1;
+  // // Iterate over each article and assign a class based on its number
+  // articles.each(function(index) {
+  //   // Add 1 to the index since it starts from 0
+  //   var articleNumber = index + 1;
 
-    // Generate the class name based on the article number
-    var className = numberToWord(articleNumber);
+  //   // Generate the class name based on the article number
+  //   var className = numberToWord(articleNumber);
 
-    // Add the class to the article
-    $(this).addClass(className);
-  });
+  //   // Add the class to the article
+  //   $(this).addClass(className);
+  // });
   
 
   
-    // Preload the first tab content
-    loadTabContent('.uagb-tabs__body-container.uagb-tabs-body__active');
+  //   // Preload the first tab content
+  //   loadTabContent('.uagb-tabs__body-container.uagb-tabs-body__active');
   
-    // Event handler for tab clicks
-    $('.uagb-tabs__panel a').click(function(e) {
-      e.preventDefault();
+  //   // Event handler for tab clicks
+  //   $('.uagb-tabs__panel a').click(function(e) {
+  //     e.preventDefault();
   
-      var targetTab = $(this).attr('href');
+  //     var targetTab = $(this).attr('href');
   
-      // Load the tab content only if it hasn't been loaded before
-      if (!$(targetTab).hasClass('loaded')) {
-        loadTabContent(targetTab);
-        $(targetTab).addClass('loaded');
-      }
+  //     // Load the tab content only if it hasn't been loaded before
+  //     if (!$(targetTab).hasClass('loaded')) {
+  //       loadTabContent(targetTab);
+  //       $(targetTab).addClass('loaded');
+  //     }
   
-      // Show the selected tab and hide others
-      $('.uagb-tabs__body-container').removeClass('uagb-tabs-body__active');
-      $(targetTab).addClass('uagb-tabs-body__active');
-    });
+  //     // Show the selected tab and hide others
+  //     $('.uagb-tabs__body-container').removeClass('uagb-tabs-body__active');
+  //     $(targetTab).addClass('uagb-tabs-body__active');
+  //   });
 
 
-    $(".wp-block-ap-block-posts .apbPagination .apbPageNumber").each(function() {
-      // Check if the element contains the text "Prev"
-      if ($(this).text().trim() === "Prev") {
-        // Replace the text "Prev" with "Previous"
-        $(this).text("Previous");
-      }
-    });
+  //   $(".wp-block-ap-block-posts .apbPagination .apbPageNumber").each(function() {
+  //     // Check if the element contains the text "Prev"
+  //     if ($(this).text().trim() === "Prev") {
+  //       // Replace the text "Prev" with "Previous"
+  //       $(this).text("Previous");
+  //     }
+  //   });
 
     
 
@@ -54,16 +54,16 @@ jQuery(document).ready(function($) {
 });
 
 
-function loadTabContent(tabId) {
-  // Show a loading spinner while content is being loaded
-  $(tabId).html('<div class="loading-spinner">Loading...</div>');
+// function loadTabContent(tabId) {
+//   // Show a loading spinner while content is being loaded
+//   $(tabId).html('<div class="loading-spinner">Loading...</div>');
 
-  // Simulate an AJAX request delay with setTimeout (remove this in production)
-  setTimeout(function() {
-    // Replace the loading spinner with the actual content
-    $(tabId).html('Content for ' + tabId);
-  }, 1000); // Adjust the delay time as needed
-}
+//   // Simulate an AJAX request delay with setTimeout (remove this in production)
+//   setTimeout(function() {
+//     // Replace the loading spinner with the actual content
+//     $(tabId).html('Content for ' + tabId);
+//   }, 1000); // Adjust the delay time as needed
+// }
 
 
 

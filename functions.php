@@ -365,7 +365,6 @@ function author_image_shortcode($atts) {
 }
 add_shortcode('author_image', 'author_image_shortcode');
 
-
 function author_name_shortcode($atts) {
     // Get the author ID
     $author_id = get_queried_object_id();
@@ -373,10 +372,26 @@ function author_name_shortcode($atts) {
     // Get the author's display name
     $author_name = get_the_author_meta('display_name', $author_id);
     
-    // Return the author's name
-    return $author_name;
+    // Build the output HTML
+    $output = '<div class="author-name-banner">';
+    $output .= '<span class="top-name">Author</span>';
+    $output .= '<h1>' . $author_name . '</h1>';
+    $output .= '</div>';
+    
+    // Return the output
+    return $output;
 }
+
+// Filter to disable automatic paragraph wrapping for the shortcode
+add_filter('the_content', 'shortcode_unautop');
+add_filter('widget_text_content', 'shortcode_unautop');
+add_filter('widget_text_content', 'do_shortcode');
+
+// Register the shortcode
 add_shortcode('author_name', 'author_name_shortcode');
+
+
+
 
 function author_bio_shortcode($atts) {
     // Get the author ID
@@ -385,8 +400,11 @@ function author_bio_shortcode($atts) {
     // Get the author's biography
     $author_bio = get_the_author_meta('description', $author_id);
     
+    // Wrap the biography in a <p> element with class
+    $output = '<p class="author-bio-banner">' . $author_bio . '</p>';
+    
     // Return the author's biography
-    return $author_bio;
+    return $output;
 }
 add_shortcode('author_bio', 'author_bio_shortcode');
 
@@ -397,22 +415,24 @@ function author_socials_shortcode() {
     $author_contact_info = '';
 
     // Check if contact information is available for the author
-    if (!empty(get_the_author_meta('linkedin', $author_id))) {
-        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('linkedin', $author_id)) . '">Linkedin</a> ';
-    }
-    if (!empty(get_the_author_meta('facebook', $author_id))) {
-        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('facebook', $author_id)) . '">Facebook</a> ';
+    if (!empty(get_the_author_meta('twitter', $author_id))) {
+        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('twitter', $author_id)) . '"><svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19.7227 4.78125C19.7227 4.99609 19.7227 5.16797 19.7227 5.38281C19.7227 11.3555 15.2109 18.1875 6.91797 18.1875C4.33984 18.1875 1.97656 17.457 0 16.168C0.34375 16.2109 0.6875 16.2539 1.07422 16.2539C3.17969 16.2539 5.11328 15.5234 6.66016 14.3203C4.68359 14.2773 3.00781 12.9883 2.44922 11.1836C2.75 11.2266 3.00781 11.2695 3.30859 11.2695C3.69531 11.2695 4.125 11.1836 4.46875 11.0977C2.40625 10.668 0.859375 8.86328 0.859375 6.67188V6.62891C1.46094 6.97266 2.19141 7.14453 2.92188 7.1875C1.67578 6.37109 0.902344 4.99609 0.902344 3.44922C0.902344 2.58984 1.11719 1.81641 1.50391 1.17188C3.73828 3.87891 7.08984 5.68359 10.8281 5.89844C10.7422 5.55469 10.6992 5.21094 10.6992 4.86719C10.6992 2.375 12.7188 0.355469 15.2109 0.355469C16.5 0.355469 17.6602 0.871094 18.5195 1.77344C19.5078 1.55859 20.4961 1.17188 21.3555 0.65625C21.0117 1.73047 20.3242 2.58984 19.3789 3.14844C20.2812 3.0625 21.1836 2.80469 21.957 2.46094C21.3555 3.36328 20.582 4.13672 19.7227 4.78125Z" fill="black"/></svg></a> ';
     }
     if (!empty(get_the_author_meta('instagram', $author_id))) {
-        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('instagram', $author_id)) . '">Instagram</a> ';
+        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('instagram', $author_id)) . '"><svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10.625 5.30859C13.332 5.30859 15.5664 7.54297 15.5664 10.25C15.5664 13 13.332 15.1914 10.625 15.1914C7.875 15.1914 5.68359 13 5.68359 10.25C5.68359 7.54297 7.875 5.30859 10.625 5.30859ZM10.625 13.4727C12.3867 13.4727 13.8047 12.0547 13.8047 10.25C13.8047 8.48828 12.3867 7.07031 10.625 7.07031C8.82031 7.07031 7.40234 8.48828 7.40234 10.25C7.40234 12.0547 8.86328 13.4727 10.625 13.4727ZM16.8984 5.13672C16.8984 4.49219 16.3828 3.97656 15.7383 3.97656C15.0938 3.97656 14.5781 4.49219 14.5781 5.13672C14.5781 5.78125 15.0938 6.29688 15.7383 6.29688C16.3828 6.29688 16.8984 5.78125 16.8984 5.13672ZM20.1641 6.29688C20.25 7.88672 20.25 12.6562 20.1641 14.2461C20.0781 15.793 19.7344 17.125 18.6172 18.2852C17.5 19.4023 16.125 19.7461 14.5781 19.832C12.9883 19.918 8.21875 19.918 6.62891 19.832C5.08203 19.7461 3.75 19.4023 2.58984 18.2852C1.47266 17.125 1.12891 15.793 1.04297 14.2461C0.957031 12.6562 0.957031 7.88672 1.04297 6.29688C1.12891 4.75 1.47266 3.375 2.58984 2.25781C3.75 1.14062 5.08203 0.796875 6.62891 0.710938C8.21875 0.625 12.9883 0.625 14.5781 0.710938C16.125 0.796875 17.5 1.14062 18.6172 2.25781C19.7344 3.375 20.0781 4.75 20.1641 6.29688ZM18.1016 15.9219C18.6172 14.6758 18.4883 11.668 18.4883 10.25C18.4883 8.875 18.6172 5.86719 18.1016 4.57812C17.7578 3.76172 17.1133 3.07422 16.2969 2.77344C15.0078 2.25781 12 2.38672 10.625 2.38672C9.20703 2.38672 6.19922 2.25781 4.95312 2.77344C4.09375 3.11719 3.44922 3.76172 3.10547 4.57812C2.58984 5.86719 2.71875 8.875 2.71875 10.25C2.71875 11.668 2.58984 14.6758 3.10547 15.9219C3.44922 16.7812 4.09375 17.4258 4.95312 17.7695C6.19922 18.2852 9.20703 18.1562 10.625 18.1562C12 18.1562 15.0078 18.2852 16.2969 17.7695C17.1133 17.4258 17.8008 16.7812 18.1016 15.9219Z" fill="black"/></svg></a> ';
     }
-    if (!empty(get_the_author_meta('twitter', $author_id))) {
-        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('twitter', $author_id)) . '">Twitter</a> ';
+    if (!empty(get_the_author_meta('facebook', $author_id))) {
+        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('facebook', $author_id)) . '"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21.6562 11.25C21.6562 16.5781 17.7461 21.0039 12.6328 21.7773V14.3438H15.125L15.5977 11.25H12.6328V9.27344C12.6328 8.41406 13.0625 7.59766 14.3945 7.59766H15.7266V4.97656C15.7266 4.97656 14.5234 4.76172 13.3203 4.76172C10.9141 4.76172 9.32422 6.26562 9.32422 8.92969V11.25H6.61719V14.3438H9.32422V21.7773C4.21094 21.0039 0.34375 16.5781 0.34375 11.25C0.34375 5.36328 5.11328 0.59375 11 0.59375C16.8867 0.59375 21.6562 5.36328 21.6562 11.25Z" fill="black"/></svg></a> ';
     }
-
-    $output = '<ul>';
-    $output .= '<li><a href="' . esc_url($author_profile_url) . '">' . get_the_author_meta('display_name', $author_id) . '</a>' . ($author_contact_info ? ' - ' . $author_contact_info : '') . '</li>';
-    $output .= '</ul>';
+    if (!empty(get_the_author_meta('linkedin', $author_id))) {
+        $author_contact_info .= '<a href="' . esc_url(get_the_author_meta('linkedin', $author_id)) . '"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.875 0.625C18.6055 0.625 19.25 1.26953 19.25 2.04297V18.5C19.25 19.2734 18.6055 19.875 17.875 19.875H1.33203C0.601562 19.875 0 19.2734 0 18.5V2.04297C0 1.26953 0.601562 0.625 1.33203 0.625H17.875ZM5.80078 17.125V7.97266H2.96484V17.125H5.80078ZM4.38281 6.68359C5.28516 6.68359 6.01562 5.95312 6.01562 5.05078C6.01562 4.14844 5.28516 3.375 4.38281 3.375C3.4375 3.375 2.70703 4.14844 2.70703 5.05078C2.70703 5.95312 3.4375 6.68359 4.38281 6.68359ZM16.5 17.125V12.0977C16.5 9.64844 15.9414 7.71484 13.0625 7.71484C11.6875 7.71484 10.7422 8.48828 10.3555 9.21875H10.3125V7.97266H7.60547V17.125H10.4414V12.6133C10.4414 11.4102 10.6562 10.25 12.1602 10.25C13.6211 10.25 13.6211 11.625 13.6211 12.6562V17.125H16.5Z" fill="black"/></svg></a> ';
+    }
+    
+    $output .= '<div class="author-socials-banner">' . ($author_contact_info ? '' . $author_contact_info : '') . '</div>';
 
     return $output;
 }
@@ -436,19 +456,22 @@ function books_by_author_shortcode() {
 
     if ($books) {
         $output .='<h2>Author books</h2>';
+        $output .='<div class="authorlist-books">';
         foreach ($books as $book) {
             $product_id = $book->ID;
             $product_title = get_the_title($product_id);
             $product_image = get_the_post_thumbnail($product_id, 'thumbnail');
             $product_link = get_permalink($product_id);
-            $product_button = '<a href="' . $product_link . '" class="button">Buy Now</a>';
+            $product_button = '<a href="' . $product_link . '" class="button transparent">Buy</a>';
 
             $output .= '<div class="product">';
             $output .= $product_image;
-            $output .= '<h3>' . $product_title . '</h3>';
+            $output .= '<span>' . $product_title . '</span>';
             $output .= $product_button;
             $output .= '</div>';
         }
+
+        $output .='</div>';
     } 
 
     return $output;
