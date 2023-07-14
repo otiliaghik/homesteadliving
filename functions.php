@@ -575,3 +575,12 @@ function other_authors_shortcode() {
     return ob_get_clean();
 }
 add_shortcode('other_authors', 'other_authors_shortcode');
+
+function category_title_shortcode( $atts ) {
+    if ( is_category() ) {
+        $category = get_queried_object();
+        return '<h1>' . $category->name . '</h1>';
+    }
+}
+add_shortcode( 'category_title', 'category_title_shortcode' );
+
